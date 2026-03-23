@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">My Walks</h2>
+  <button type="button" class="btn btn-primary"
+          data-bs-toggle="modal" data-bs-target="#walkModal">
+    Log a Walk
+  </button>
+</div>
+
+<% if @walks.any? %>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Date</th>
+          <th>Distance</th>
+          <th>Steps</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @walks.each do |walk| %>
+          <tr>
+            <td><%= walk.walked_on.strftime('%a, %b %-d %Y') %></td>
+            <td><%= '%.2f mi' % walk.distance_miles %></td>
+            <td><%= number_with_delimiter(walk.steps) %></td>
+            <td class="text-end">
+              <button type="button" class="btn btn-sm btn-outline-secondary"
+                      data-bs-toggle="modal" data-bs-target="#walkModal"
+                      data-walk-id="<%= walk.id %>"
+                      data-walked-on="<%= walk.walked_on %>"
+                      data-distance-miles="<%= walk.distance_miles %>"
+                      data-steps="<%= walk.steps %>">
+                Edit
+              </button>
+              <%= button_to "Delete", walk_path(walk), method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    form: { onsubmit: "return confirm('Delete this walk?')" },
+                    form_class: "d-inline" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <p class="text-muted">No walks yet — log your first one!</p>
+<% end %>
+
+<%= render 'modal' %>

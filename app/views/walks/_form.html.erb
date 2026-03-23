@@ -1,0 +1,45 @@
+<% if walk&.errors&.any? %>
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      <% walk.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="mb-3">
+  <%= f.label :walked_on, class: "form-label" %>
+  <%= f.date_field :walked_on,
+        class: "form-control #{'is-invalid' if walk&.errors&.[](:walked_on)&.any?}",
+        value: walk&.walked_on || Date.today %>
+  <% if walk&.errors&.[](:walked_on)&.any? %>
+    <div class="invalid-feedback">
+      <%= walk.errors[:walked_on].first %>
+    </div>
+  <% end %>
+</div>
+
+<div class="mb-3">
+  <%= f.label :distance_miles, "Distance (miles)", class: "form-label" %>
+  <%= f.number_field :distance_miles,
+        step: 0.01, min: 0.01,
+        class: "form-control #{'is-invalid' if walk&.errors&.[](:distance_miles)&.any?}" %>
+  <% if walk&.errors&.[](:distance_miles)&.any? %>
+    <div class="invalid-feedback">
+      <%= walk.errors[:distance_miles].first %>
+    </div>
+  <% end %>
+</div>
+
+<div class="mb-3">
+  <%= f.label :steps, class: "form-label" %>
+  <%= f.number_field :steps,
+        min: 1,
+        class: "form-control #{'is-invalid' if walk&.errors&.[](:steps)&.any?}" %>
+  <% if walk&.errors&.[](:steps)&.any? %>
+    <div class="invalid-feedback">
+      <%= walk.errors[:steps].first %>
+    </div>
+  <% end %>
+</div>

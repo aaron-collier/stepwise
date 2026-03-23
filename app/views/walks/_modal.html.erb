@@ -1,0 +1,55 @@
+<% modal_url    = @walk&.persisted? ? walk_path(@walk) : walks_path %>
+<% modal_method = @walk&.persisted? ? :patch : :post %>
+
+<div class="modal fade" id="walkModal" tabindex="-1" aria-labelledby="walkModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="walkModalLabel">Log a Walk</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with scope: :walk, url: modal_url, method: modal_method, id: "walk-form" do |f| %>
+        <% unless @walk&.persisted? %>
+          <input type="hidden" name="_method" id="walk-form-method" value="">
+        <% end %>
+        <div class="modal-body">
+          <%= render 'form', f: f, walk: @walk %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <%= f.submit "Save Walk", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var walkModal = document.getElementById('walkModal');
+    if (!walkModal) return;
+
+    walkModal.addEventListener('show.bs.modal', function(event) {
+      var button = event.relatedTarget;
+      var form   = document.getElementById('walk-form');
+      var methodInput = document.getElementById('walk-form-method');
+
+      if (button && button.dataset.walkId) {
+        form.action = '/walks/' + button.dataset.walkId;
+        if (methodInput) methodInput.value = 'patch';
+        form.querySelector('[name="walk[walked_on]"]').value        = button.dataset.walkedOn;
+        form.querySelector('[name="walk[distance_miles]"]').value   = button.dataset.distanceMiles;
+        form.querySelector('[name="walk[steps]"]').value            = button.dataset.steps;
+        document.getElementById('walkModalLabel').textContent       = 'Edit Walk';
+      } else {
+        form.action = '/walks';
+        if (methodInput) methodInput.value = '';
+        var walkedOnField = form.querySelector('[name="walk[walked_on]"]');
+        if (walkedOnField && !walkedOnField.value) {
+          walkedOnField.value = new Date().toISOString().split('T')[0];
+        }
+        document.getElementById('walkModalLabel').textContent = 'Log a Walk';
+      }
+    });
+  })();
+</script>

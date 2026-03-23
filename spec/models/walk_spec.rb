@@ -60,4 +60,21 @@ RSpec.describe Walk, type: :model do
       expect(assoc.macro).to eq(:belongs_to)
     end
   end
+
+  describe 'scopes' do
+    let(:user) { create(:user) }
+
+    describe '.recent' do
+      it 'returns walks ordered by walked_on desc, created_at desc' do
+        older = create(:walk, user: user, walked_on: 1.week.ago.to_date)
+        newer = create(:walk, user: user, walked_on: Date.today)
+        expect(Walk.recent(10).to_a).to eq([newer, older])
+      end
+
+      it 'limits to n records' do
+        create_list(:walk, 5, user: user)
+        expect(Walk.recent(3).count).to eq(3)
+      end
+    end
+  end
 end

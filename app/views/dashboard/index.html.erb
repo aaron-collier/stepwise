@@ -1,22 +1,71 @@
-<%
-  hour = Time.current.hour
-  greeting = case hour
-             when 0..11  then "Good morning"
-             when 12..17 then "Good afternoon"
-             else             "Good evening"
-             end
-%>
-
-<h1 class="mb-4"><%= greeting %>, <%= @user&.first_name %>!</h1>
+<h1 class="mb-4"><%= @presenter.greeting %>, <%= @user&.first_name %>!</h1>
 
 <div class="row g-3 mb-4">
-  <div class="col-12">
-    <!-- stats placeholder -->
+  <div class="col-md-3">
+    <div class="card h-100 <%= @stats[:steps_today] >= 10_000 ? 'border-success' : 'border-warning' %>">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-1 text-muted">Today's Steps</h6>
+        <p class="card-text fs-4 fw-bold mb-1"><%= number_with_delimiter(@stats[:steps_today]) %></p>
+        <p class="card-text text-muted small">Goal: 10,000 steps</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-1 text-muted">Today's Miles</h6>
+        <p class="card-text fs-4 fw-bold mb-0"><%= '%.2f' % @stats[:miles_today] %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-1 text-muted">Avg Steps / Walk</h6>
+        <p class="card-text fs-4 fw-bold mb-0"><%= number_with_delimiter(@stats[:avg_steps_per_walk]) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card h-100 <%= @stats[:avg_steps_per_day] >= 10_000 ? 'border-success' : 'border-warning' %>">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-1 text-muted">Avg Steps / Day</h6>
+        <p class="card-text fs-4 fw-bold mb-0"><%= number_with_delimiter(@stats[:avg_steps_per_day]) %></p>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="row">
   <div class="col-12">
-    <!-- walks placeholder -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0">Recent Walks</h4>
+      <%= link_to "View All", walks_path, class: "btn btn-sm btn-outline-primary" %>
+    </div>
+
+    <% if @walks.any? %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Date</th>
+              <th>Distance</th>
+              <th>Steps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @walks.each do |walk| %>
+              <tr>
+                <td><%= walk.walked_on.strftime('%a, %b %-d %Y') %></td>
+                <td><%= '%.2f mi' % walk.distance_miles %></td>
+                <td><%= number_with_delimiter(walk.steps) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-muted">No walks yet — <%= link_to "log your first one", walks_path %>!</p>
+    <% end %>
   </div>
 </div>
