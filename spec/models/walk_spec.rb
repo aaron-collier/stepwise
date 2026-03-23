@@ -68,7 +68,7 @@ RSpec.describe Walk, type: :model do
       it 'returns walks ordered by walked_on desc, created_at desc' do
         older = create(:walk, user: user, walked_on: 1.week.ago.to_date)
         newer = create(:walk, user: user, walked_on: Date.today)
-        expect(Walk.recent(10).to_a).to eq([newer, older])
+        expect(Walk.recent(10).to_a).to eq([ newer, older ])
       end
 
       it 'limits to n records' do

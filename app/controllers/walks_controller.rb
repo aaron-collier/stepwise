@@ -13,7 +13,7 @@ class WalksController < ApplicationController
   def create
     @walk = User.first.walks.build(walk_params)
     if @walk.save
-      redirect_to walks_path, notice: 'Walk logged.'
+      redirect_to walks_path, notice: "Walk logged."
     else
       render :new, status: :unprocessable_entity
     end
@@ -23,7 +23,7 @@ class WalksController < ApplicationController
 
   def update
     if @walk.update(walk_params)
-      redirect_to walks_path, notice: 'Walk updated.'
+      redirect_to walks_path, notice: "Walk updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class WalksController < ApplicationController
 
   def destroy
     @walk.destroy
-    redirect_to walks_path, notice: 'Walk deleted.'
+    redirect_to walks_path, notice: "Walk deleted."
   end
 
   private

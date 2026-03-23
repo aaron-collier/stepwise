@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root "dashboard#index"
 
-  resources :walks, except: [:show]
+  resources :walks, except: [ :show ]
 
   get   "/profile",      to: "profile#show",   as: :profile
   get   "/profile/edit", to: "profile#edit",   as: :edit_profile
