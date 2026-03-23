@@ -1,0 +1,24 @@
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="mb-0">Profile</h4>
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">First name</dt>
+          <dd class="col-sm-8"><%= @user.first_name %></dd>
+
+          <dt class="col-sm-4">Last name</dt>
+          <dd class="col-sm-8"><%= @user.last_name %></dd>
+
+          <dt class="col-sm-4">Email</dt>
+          <dd class="col-sm-8"><%= @user.email %></dd>
+        </dl>
+      </div>
+      <div class="card-footer text-end">
+        <%= link_to "Edit Profile", edit_profile_path, class: "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  </div>
+</div>
