@@ -19,4 +19,10 @@ A personal walk-tracking app. Single user, no auth for now.
 - No callbacks on models — use service objects if logic is needed
 - migrations must be reversible
 - Keep controllers thin — no business logic
+- Display logic that manipulates data for presentation belongs in a presenter
+  class in app/presenters/ — never in views or controllers
 - Do not add gems without asking me first
+
+## Setup notes
+- rails_helper.rb includes FactoryBot::Syntax::Methods — do not add it again
+- app/presenters/ is autoloaded — no require statements needed
